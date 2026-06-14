@@ -1,5 +1,4 @@
 --[[
-
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
@@ -228,6 +227,9 @@ do
   vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
   vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+  -- Set relative line numbers
+  vim.opt.relativenumber = true
+
   -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
   -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
   -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
@@ -340,6 +342,12 @@ do
   vim.pack.add { gh 'NMAC427/guess-indent.nvim' }
   require('guess-indent').setup {}
 
+  -- Easier window focus shifts
+  vim.keymap.set('n', '<C-h>', '<C-w>h')
+  vim.keymap.set('n', '<C-l>', '<C-w>l')
+  vim.keymap.set('n', '<C-j>', '<C-w>j')
+  vim.keymap.set('n', '<C-k>', '<C-w>k')
+
   -- Because lua is a real programming language, you can also have some logic to your installation -
   -- like only installing a plugin if a condition is met.
   --
@@ -377,6 +385,14 @@ do
     },
   }
 
+  -- Trying to add a terminal plugin
+  vim.pack.add { gh "akinsho/toggleterm.nvim" }
+  require("toggleterm").setup{
+    -- size can be a number or function which is passed the current terminal
+    size = 20,
+    vim.keymap.set('n', '<leader>i', '<cmd>ToggleTerm><cr>')
+  }
+
   -- [[ Colorscheme ]]
   -- You can easily change to a different colorscheme.
   -- Change the name of the colorscheme plugin below, and then
@@ -396,9 +412,22 @@ do
   -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
   vim.cmd.colorscheme 'tokyonight-night'
 
+  vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+  vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+
+  vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'none' }) 
+
+  vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = 'none' })
+  vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = 'none' })
+  vim.api.nvim_set_hl(0, 'NeoTreeWinSeparator', { bg = 'none' })
+
+
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
   require('todo-comments').setup { signs = false }
+
+  -- Auto-direct in Terminal
+  vim.o.autochdir = true
 
   -- [[ mini.nvim ]]
   --  A collection of various small independent plugins/modules
@@ -686,7 +715,7 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    -- clangd = {},
+    clangd = {},
     -- gopls = {},
     -- pyright = {},
     -- rust_analyzer = {},
@@ -818,8 +847,8 @@ do
   --    See the README about individual language/framework/plugin snippets:
   --    https://github.com/rafamadriz/friendly-snippets
   --
-  -- vim.pack.add { gh 'rafamadriz/friendly-snippets' }
-  -- require('luasnip.loaders.from_vscode').lazy_load()
+  vim.pack.add { gh 'rafamadriz/friendly-snippets' }
+  require('luasnip.loaders.from_vscode').lazy_load()
 
   -- [[ Autocomplete Engine ]]
   vim.pack.add { { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' } }
@@ -846,7 +875,7 @@ do
       -- <c-k>: Toggle signature help
       --
       -- See `:help blink-cmp-config-keymap` for defining your own keymap
-      preset = 'default',
+      preset = 'enter',
 
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -961,13 +990,15 @@ do
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug'
-  -- require 'kickstart.plugins.indent_line'
+require 'kickstart.plugins.indent_line'
   -- require 'kickstart.plugins.lint'
   -- require 'kickstart.plugins.autopairs'
-  -- require 'kickstart.plugins.neo-tree'
+require 'kickstart.plugins.neo-tree'
+
+
   -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
-  -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
+  -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`The genre of the game is considered real-time strategy, simulation
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   -- require 'custom.plugins'
